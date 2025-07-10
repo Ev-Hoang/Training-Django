@@ -1,0 +1,27 @@
+[project]
+name = "training_django"
+version = "0.1.0"
+description = "Django REST API with PostgreSQL and Redis"
+authors = [
+    {name = "Ev", email = "hduckien@gmail.com"}
+]
+requires-python = ">=3.10"
+
+dependencies = [
+    "django>=4.2",
+    "djangorestframework",
+    "psycopg2-binary",
+    "django-redis",
+    "python-dotenv"
+]
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.pdm]
+# Định nghĩa cho PDM dùng
+
+[tool.pdm.scripts]
+# Shortcut để chạy server nhanh với lệnh: pdm run dev
+dev = "python manage.py runserver 0.0.0.0:8000"
