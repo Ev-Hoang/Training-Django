@@ -45,9 +45,15 @@ jobs:
           pdm config python.use_venv true
           pdm install
 
-      - name: 🧪 Run Django checks
-        run: |
-          pdm run python manage.py check
+      - name: ✅ Check Django
+        env:
+          DATABASE_NAME: test_db
+          DATABASE_USER: postgres
+          DATABASE_PASSWORD: postgres
+          DATABASE_HOST: localhost
+          DATABASE_PORT: 5432
+          REDIS_URL: redis://localhost:6379/0
+        run: pdm run python manage.py check
 
       - name: ⚙️ Run Migrations
         env:
