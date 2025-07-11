@@ -1,14 +1,20 @@
 from rest_framework import serializers
 from .models import Post
 
+
+class PostFileUploadSerializer(serializers.Serializer):
+    file = serializers.FileField()
+
 class PostQuerySerializer(serializers.Serializer):
     search = serializers.CharField(required=False)
     limit = serializers.IntegerField(required=False, default=10)
     offset = serializers.IntegerField(required=False, default=0)
 
 class PostSerializer(serializers.ModelSerializer):
-
-    created_at = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%SZ")
+    title = serializers.CharField(required=True, allow_blank=False)
+    content = serializers.CharField(required=True, allow_blank=False)
+    author = serializers.CharField(required=True, allow_blank=False)
+    created_at = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%SZ", read_only=True)
 
     class Meta:
         model = Post
