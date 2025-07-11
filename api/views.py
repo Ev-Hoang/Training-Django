@@ -7,8 +7,7 @@ from drf_yasg.utils import swagger_auto_schema
 from .serializers import PostSerializer
 from django.shortcuts import get_object_or_404
 
-# /api/posts/
-class PostListAPIView(APIView):
+class PostAPIView(APIView):
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
@@ -60,14 +59,11 @@ class PostListAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# /api/posts/<id>/
-class PostDetailAPIView(APIView):
+    
     def get(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)
-        serializer = PostSerializer(post)
-        return Response(serializer.data)
+            post = get_object_or_404(Post, pk=pk)
+            serializer = PostSerializer(post)
+            return Response(serializer.data)
 
     @swagger_auto_schema(request_body=PostSerializer)
     def put(self, request, pk):
