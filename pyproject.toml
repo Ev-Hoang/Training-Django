@@ -12,7 +12,8 @@ dependencies = [
     "djangorestframework",
     "psycopg2-binary",
     "django-redis",
-    "python-dotenv"
+    "python-dotenv",
+    "drf-yasg>=1.21.10"
 ]
 
 [build-system]
