@@ -4,32 +4,11 @@ from rest_framework import status
 from ..models import Post
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from ..serializers import PostSerializer
+from ..serializers import PostSerializer, PostQuerySerializer
 
 # /api/posts/
 class PostListAPIView(APIView):
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter(
-                'search',
-                openapi.IN_QUERY,
-                description="Search by title",
-                type=openapi.TYPE_STRING
-            ),
-            openapi.Parameter(
-                'limit',
-                openapi.IN_QUERY,
-                description="Ammount of blogs",
-                type=openapi.TYPE_INTEGER
-            ),
-            openapi.Parameter(
-                'offset',
-                openapi.IN_QUERY,
-                description="Offsets",
-                type=openapi.TYPE_INTEGER
-            ),
-        ]
-    )
+    @swagger_auto_schema(query_serializer=PostQuerySerializer)
     def get(self, request):
         # Search theo title
         search_query = request.GET.get('search')
