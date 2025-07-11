@@ -25,6 +25,22 @@ class PostExportAPIView(APIView):
 class PostImportAPIView(APIView):
     @swagger_auto_schema(request_body=PostFileUploadSerializer)
     def post(self, request):
+        """
+        Import danh sách bài viết từ file JSON trên server.
+
+        Quy trình:
+        - Kiểm tra sự tồn tại của file JSON theo đường dẫn JSON_FILE_PATH.
+        - Đọc dữ liệu JSON từ file.
+        - Dùng serializer để validate và lưu nhiều bài viết cùng lúc.
+
+        Params:
+        - request: request object (dùng để upload file hoặc trigger import).
+
+        Trả về:
+        - 200 với thông báo số bài viết đã import thành công.
+        - 400 nếu file JSON không tồn tại hoặc dữ liệu không hợp lệ.
+        - 500 nếu xảy ra lỗi hệ thống trong quá trình đọc hoặc lưu dữ liệu.
+        """
         try:
             if not os.path.exists(JSON_FILE_PATH):
                 return Response({"error": "JSON file not found"}, status=status.HTTP_400_BAD_REQUEST)

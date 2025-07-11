@@ -13,6 +13,19 @@ class PostListAPIView(APIView):
 
     @swagger_auto_schema(query_serializer=PostQuerySerializer)
     def get(self, request):
+        """
+        Lấy danh sách bài viết với khả năng tìm kiếm và phân trang.
+
+        Query parameters:
+        - search (str, optional): Từ khóa tìm kiếm trong tiêu đề bài viết.
+        - limit (int, optional): Số lượng bài viết trả về mỗi trang, mặc định 10.
+        - offset (int, optional): Vị trí bắt đầu lấy dữ liệu (để phân trang), mặc định 0.
+
+        Trả về:
+        - 200: JSON chứa tổng số bài viết phù hợp (total), limit, offset, và danh sách kết quả.
+        - 400: Nếu giá trị limit hoặc offset không hợp lệ.
+        - 500: Lỗi server không mong muốn.
+        """
         try:
             # Lấy dữ liệu query params
             search_query = request.GET.get('search')
@@ -43,6 +56,17 @@ class PostListAPIView(APIView):
 
     @swagger_auto_schema(request_body=PostSerializer)
     def post(self, request):
+        """
+        Tạo mới một bài viết.
+
+        Request body:
+        - JSON chứa dữ liệu bài viết theo cấu trúc của PostSerializer.
+
+        Trả về:
+        - 201: Dữ liệu bài viết đã được tạo thành công.
+        - 400: Dữ liệu gửi lên không hợp lệ (validation error).
+        - 500: Lỗi server không mong muốn.
+        """
         try:
             serializer = PostSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)

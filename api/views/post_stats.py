@@ -8,6 +8,14 @@ from ..models import Post
 
 class PostStatsAPIView(APIView):
     def get(self, request):
+        """
+        Lấy thống kê số lượng bài viết theo từng tác giả.
+
+        Trả về:
+        - 200: Danh sách các tác giả kèm số lượng bài viết của họ, sắp xếp giảm dần theo số lượng.
+          Format mỗi phần tử: {"author": author_id, "count": số lượng bài viết}
+        - 500: Nếu có lỗi server xảy ra.
+        """
         try:
             stats = Post.objects.values('author').annotate(count=Count('id')).order_by('-count')
             return Response(stats)

@@ -9,7 +9,7 @@ class PostAPITests(APITestCase):
     def setUp(self):
         self.post1 = Post.objects.create(title="Test Post 1", content="Content 1", author="Author A")
         self.post2 = Post.objects.create(title="Another Post", content="Content 2", author="Author B")
-        self.list_url = reverse('post-list')  # ex: path('posts/', PostListAPIView.as_view(), name='post-list')
+        self.list_url = reverse('post-list')
         self.detail_url = lambda pk: reverse('post-detail', kwargs={'pk': pk})
 
     def test_list_posts(self):
