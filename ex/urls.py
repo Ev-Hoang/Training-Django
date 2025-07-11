@@ -25,7 +25,7 @@ schema_view = get_schema_view(
       title="Blog API",
       default_version='v1',
       description="REST API documentation for the Blog project",
-      contact=openapi.Contact(email="you@example.com"),
+      contact=openapi.Contact(email="hoangduckien0402@gmail.com"),
       license=openapi.License(name="MIT License"),
    ),
    public=True,

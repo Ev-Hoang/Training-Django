@@ -1,51 +1,41 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
-# Dữ liệu giả lập (giống database)
-posts = [
-    {
-        "id": 1,
-        "title": "Bài viết đầu tiên",
-        "content": "Nội dung bài viết...",
-        "author": "Admin",
-        "created_at": "2025-01-01T10:00:00"
-    }
-]
-
+from .models import Post
+from .serializers import PostSerializer
+from django.shortcuts import get_object_or_404
 
 # /api/posts/
 class PostListAPIView(APIView):
     def get(self, request):
-        return Response(posts)
+        posts = Post.objects.all()
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)
 
     def post(self, request):
-        new_post = request.data
-        new_post["id"] = posts[-1]["id"] + 1 if posts else 1
-        posts.append(new_post)
-        return Response(new_post, status=status.HTTP_201_CREATED)
+        serializer = PostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # /api/posts/<id>/
 class PostDetailAPIView(APIView):
-    def get_object(self, pk):
-        return next((p for p in posts if p["id"] == pk), None)
-
     def get(self, request, pk):
-        post = self.get_object(pk)
-        if post:
-            return Response(post)
-        return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+        post = get_object_or_404(Post, pk=pk)
+        serializer = PostSerializer(post)
+        return Response(serializer.data)
 
     def put(self, request, pk):
-        post = self.get_object(pk)
-        if not post:
-            return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        post.update(request.data)
-        return Response(post)
+        post = get_object_or_404(Post, pk=pk)
+        serializer = PostSerializer(post, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        global posts
-        posts = [p for p in posts if p["id"] != pk]
+        post = get_object_or_404(Post, pk=pk)
+        post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
